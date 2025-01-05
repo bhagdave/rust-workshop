@@ -14,7 +14,6 @@ fn closure(a: u32, s: String) {
         //
         // You can say that "the closure takes ownership of the outer variable". Remove the
         // following line to fix this function.
-        take(s);
         res
     };
 
@@ -55,7 +54,7 @@ fn take(s: String) {
     println!("{}", s);
 }
 
-fn for_loops(vec: Vec<usize>) {
+fn for_loops(vec: Vec<u32>) {
     // In Rust classic for-loops with a counter are discuraged. You will find that you almost never
     // need such a loop. Instead you have iterators.
     //
@@ -65,7 +64,7 @@ fn for_loops(vec: Vec<usize>) {
     }
 
     // Because Rust is a convenient language you can also leave out the `.iter()` call.
-    for elem in vec {
+    for elem in &vec {
         println!("{}", elem);
     }
 
@@ -84,10 +83,9 @@ fn iterators(vec: Vec<usize>) {
     //
     // But see yourself. Change `into_iter()` to `iter()` and compare the compiler output by
     // uncommenting the `let` statement in the loop.
-    for elem in vec.into_iter() {
+    for elem in vec.iter() {
         // This is a hack to let the compiler show you the type of `elem`. `printf`-debugging
         // during compile time.
-        // let _: () = elem;
         println!("{}", elem);
     }
 
@@ -99,19 +97,19 @@ fn iterators(vec: Vec<usize>) {
 
     // Before running the for loop you may want to modify the iterator, by for example filtering
     // out elements. See `iterators_on_steroids` for more useful methods of iterators.
-    for elem in vec.iter().filter(|x| x % 2 == 0) {
+    for elem in vec.iter().filter(|x| *x % 2 == 0) {
         println!("Only even: {}", elem);
     }
 }
 
 // You'll find that you often don't even need a for loop, but can do things purely with iterators
 // and its methods.
-fn iterators_on_steroids(vec: Vec<usize>) {
+fn iterators_on_steroids(vec: Vec<u32>) {
     let greater_three_except_first = vec
         // First get an iterator
         .iter()
         // Next only find the elements that are at least 3
-        .filter(|x| *x >= 3)
+        .filter(|x| *x >= &3)
         // Skip the fist element, because for some reason we don't care about this
         .skip(1)
         // Convert/Map the element to a `String`
@@ -125,7 +123,7 @@ fn iterators_on_steroids(vec: Vec<usize>) {
     // to pass.
     let first_two_even_floats = vec;
 
-    assert_eq!(first_two_even_floats, vec![2f32, 4f32]);
+    assert_eq!(first_two_even_floats, vec![2u32, 4u32]);
 }
 
 fn main() {

@@ -4,7 +4,7 @@
 /// The `derive` attribute provides some functionality to the struct. In this case, those derives
 /// allows comparisons of instances of `S` and the cloning of `S`. "Things" can be derived, when all
 /// fields also derive or implement these "things".
-#[derive(Eq, PartialEq, Clone)]
+#[derive(Eq, PartialEq, Clone, Debug)]
 struct S {
     a: u32,
     b: String,
@@ -22,7 +22,7 @@ impl S {
     }
 
     // This is a method. The first argument is a reference to `self`. But is this correct?
-    fn push_bool(&self, b: bool) {
+    fn push_bool(&mut self, b: bool) {
         self.c.push(b);
     }
 }
@@ -53,7 +53,12 @@ impl E {
     fn creative_printing(&self) {
         match self {
             Self::A => println!("A is boring"),
-            Self::B(x, _) if *x == 42 => println!("This seems to be the answer"),
+            Self::B(x, _) if *x == 42 => println!("X is 42"),
+            Self::B(_, y) if *y  => println!("Its True"),
+            Self::B(x, y) if *y || *x == 50 => println!("its 50 or true"),
+            Self::B(_, _)  => println!("I dont care about the answer"),
+            Self::C{a ,b} => println!("A is Boring {} B is better {}", a, b),
+            Self::D(S {a , b, c: _}) => println!("Just finishing with S equal to {} {}",a,b), 
         }
     }
 
@@ -67,6 +72,7 @@ impl E {
             Self::B(a, b) => (a, b),
             Self::C { a, b } => (a as u32, b.is_empty()),
             // Add the `E::D` case by destructuring `S`
+            Self::D(S {a , b, c: _}) => (a, b.is_empty()), 
         }
     }
 }
@@ -78,7 +84,7 @@ fn main() {
     if let Some(e) = &e {
         e.creative_printing();
     } else {
-        let mut my_s = S::new(42, "Hello, Rustacean!");
+        let  mut my_s = S::new(42, "Hello, Rustacean!".to_string());
         my_s.push_bool(true);
         match my_s {
             S { a, c, .. } if a > 10 => println!("{:?}", c.get(0)),

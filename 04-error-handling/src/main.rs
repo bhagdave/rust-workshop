@@ -64,6 +64,7 @@ fn main() {
 
     // And now you: Try to use functions like `map` or `and_then` to transform the results.
     let float_mult: Option<f32> = Some(0f32);
+    
 
     let still_optional_div: Option<f64> = Some(0f64);
 

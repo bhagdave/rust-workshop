@@ -55,6 +55,12 @@ impl AnimalBehavior for Cat {
         self.x = x + 2;
         self.y = y + 2;
     }
+    fn be_annoyed(&mut self) {
+        self.annoyed = true;
+    }
+    fn location(&self) -> (u32, u32) {
+        (self.x, self.y)
+    }
 }
 
 impl AnimalBehavior for Dog {
@@ -103,11 +109,11 @@ impl std::ops::Add for Dog {
 
 // What you *can't* do is implement a foreign trait for a foreign type. One of the two have to be
 // defined in your own crate.
-impl std::ops::Add for Vec<usize> {
+impl std::ops::Add for Cat {
     type Output = usize;
 
-    fn add(self, rhs: Vec<usize>) -> Self::Output {
-        self.iter().zip(&rhs).fold(0, |acc, (x, y)| acc + x + y)
+    fn add(self, rhs: Cat) -> Self::Output {
+        32 as usize
     }
 }
 
